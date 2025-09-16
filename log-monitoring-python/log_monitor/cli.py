@@ -2,42 +2,33 @@ from pathlib import Path
 from .parser import parse_lines
 from .monitor import build_report
 
+# Main function for CLI execution
+# Reads log file, processes jobs, and writes warnings/errors to output
+
 def main():
-    # Determine root directory and input/output file paths
-    root_dir = Path(__file__).resolve().parents[2]
-    input_path = root_dir / "logs.log"
+    root_dir = Path(__file__).resolve().parents[2] 
+    input_path = root_dir / "logs.log" 
     output_path = root_dir / "output.log"
 
-    with open(input_path) as f:
-        entries = parse_lines(f)
-
+    entries = parse_lines(open(input_path))
     report = build_report(entries)
 
-    # Filter only background job results
-    background_results = [r for r in report.results if "job" in r.description]
-
-    # Separate warnings and errors based on job duration
-    warnings = [r for r in background_results if r.level() == "WARNING"]
-    errors = [r for r in background_results if r.level() == "ERROR"]
-
-    lines = []
-    lines.append("---- Warnings ----")
+    # Filter only background jobs (ignore scheduled tasks)
+    jobs = [r for r in report.results if "job" in r.description]
     
-    # Add warning jobs to output
-    for r in warnings:
-        secs = int(r.duration.total_seconds())
-        lines.append(f"WARNING: {secs} (PID: {r.pid}) took {secs} seconds.")
+    # Split jobs into warnings and errors based on duration
+    warnings = [r for r in jobs if r.level() == "WARNING"]
+    errors = [r for r in jobs if r.level() == "ERROR"]
 
-    lines.append("\n---- Errors ----")
-    
-    # Add error jobs to output
-    for r in errors:
-        secs = int(r.duration.total_seconds())
-        lines.append(f"ERROR: {secs} (PID: {r.pid}) took {secs} seconds.")
+    lines = ["---- Warnings ----"] + [
+        f"WARNING: {int(r.duration.total_seconds())} (PID: {r.pid}) took {int(r.duration.total_seconds())} seconds."
+        for r in warnings
+    ] + ["\n---- Errors ----"] + [
+        f"ERROR: {int(r.duration.total_seconds())} (PID: {r.pid}) took {int(r.duration.total_seconds())} seconds."
+        for r in errors
+    ]
 
-    output_text = "\n".join(lines)
-
-    output_path.write_text(output_text, encoding="utf-8")
+    output_path.write_text("\n".join(lines), encoding="utf-8")
 
 if __name__ == "__main__":
     main()

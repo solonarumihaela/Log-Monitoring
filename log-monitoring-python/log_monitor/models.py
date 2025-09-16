@@ -28,13 +28,3 @@ class JobResult:
         if secs > warn_seconds:
             return "WARNING"
         return None
-
-    def as_dict(self):
-        return {
-            "pid": self.pid,
-            "description": self.description,
-            "start": self.start.strftime("%H:%M:%S"),
-            "end": self.end.strftime("%H:%M:%S"),
-            "duration_seconds": int(self.duration.total_seconds()),
-            "level": self.level()
-        }
