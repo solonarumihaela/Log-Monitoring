@@ -16,6 +16,7 @@ class MonitoringReport:
             levels[lvl or "OK"] += 1
         return levels
 
+# Matches START/END log entries to build job results and track unmatched events
 def build_report(entries: List[LogEntry]) -> MonitoringReport:
     stacks: Dict[Tuple[str,str], List[LogEntry]] = defaultdict(list)
     results: List[JobResult] = []
@@ -24,10 +25,10 @@ def build_report(entries: List[LogEntry]) -> MonitoringReport:
     for e in entries:
         key = e.key
         if e.state == "START":
-            stacks[key].append(e)
+            stacks[key].append(e)  # Push START event to stack
         else:
             if stacks[key]:
-                s = stacks[key].pop()
+                s = stacks[key].pop()  # Pop matching START event
                 results.append(JobResult(
                     pid=e.pid,
                     description=e.description,
@@ -36,8 +37,9 @@ def build_report(entries: List[LogEntry]) -> MonitoringReport:
                     duration=e.timestamp - s.timestamp
                 ))
             else:
-                unmatched_ends.append(e)
+                unmatched_ends.append(e)  # No matching START for this END
 
+    # Collect all unmatched START events left in stacks
     unmatched_starts = [x for stack in stacks.values() for x in stack]
 
     return MonitoringReport(results, unmatched_starts, unmatched_ends)

@@ -1,0 +1,35 @@
+test_duration_10_minutes (test_monitor.TestJobs.test_duration_10_minutes)
+Duration exactly 10 minutes ... ok
+[OK]       Duration exactly 10 minutes
+test_duration_11_minutes (test_monitor.TestJobs.test_duration_11_minutes)
+Duration over 10 minutes ... ok
+[OK]       Duration over 10 minutes
+test_duration_30_seconds (test_monitor.TestJobs.test_duration_30_seconds)
+Very short job (30 seconds) ... ok
+[OK]       Very short job (30 seconds)
+test_duration_5_minutes (test_monitor.TestJobs.test_duration_5_minutes)
+Duration exactly 5 minutes ... ok
+[OK]       Duration exactly 5 minutes
+test_duration_7_minutes (test_monitor.TestJobs.test_duration_7_minutes)
+Duration between 5 and 10 minutes ... ok
+[OK]       Duration between 5 and 10 minutes
+test_ignore_scheduled_tasks (test_monitor.TestJobs.test_ignore_scheduled_tasks)
+Ignore scheduled tasks and count only jobs ... ok
+[OK]       Ignore scheduled tasks and count only jobs
+test_multiple_intervals_same_pid (test_monitor.TestJobs.test_multiple_intervals_same_pid)
+Same PID appearing twice with START/END pairs ... ok
+[OK]       Same PID appearing twice with START/END pairs
+test_two_jobs_different_pids (test_monitor.TestJobs.test_two_jobs_different_pids)
+Two different jobs ... ok
+[OK]       Two different jobs
+test_unmatched_end (test_monitor.TestJobs.test_unmatched_end)
+Job with END but no START ... ok
+[OK]       Job with END but no START
+test_unmatched_start (test_monitor.TestJobs.test_unmatched_start)
+Job with START but no END ... ok
+[OK]       Job with START but no END
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.001s
+
+OK

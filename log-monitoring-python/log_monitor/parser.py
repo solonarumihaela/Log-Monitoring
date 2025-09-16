@@ -2,12 +2,14 @@ from datetime import datetime, date, timedelta
 from typing import Iterable, List
 from .models import LogEntry
 
+# Parse a timestamp string (HH:MM:SS) into a datetime object
+# Handles day rollover if times go past midnight
 def _parse_timestamp(ts: str, base: date | None = None, last: datetime | None = None) -> datetime:
     base = base or date.today()
     h, m, s = map(int, ts.split(":"))
     candidate = datetime(base.year, base.month, base.day, h, m, s)
     if last and candidate < last:
-        candidate += timedelta(days=1)
+        candidate += timedelta(days=1)  # If time goes backwards, assume next day
     return candidate
 
 def parse_lines(lines: Iterable[str]) -> List[LogEntry]:
