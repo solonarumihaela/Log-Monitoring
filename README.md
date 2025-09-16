@@ -33,6 +33,7 @@ log-monitoring-python/
 │   └── test_monitor.py   # Unit tests for core functionality
 │
 ├── run_tests.py          # Custom test runner
+├── test_results.log      # Generated report
 │
 logs.log                  # Sample log input (outside log-monitoring-python)
 output.log                # Generated report (outside log-monitoring-python)
